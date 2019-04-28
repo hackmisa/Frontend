@@ -14,8 +14,36 @@
 </head>
 <body>
   <h1>Disaster Detection</h1>
+  <input type="checkbox" id="Check1" name="Check" value="Flood" onclick="selectOnlyThis(this.id)"> Flood <br>
+  <input type="checkbox" id="Check2" name="fire" value="Fire" onclick="selectOnlyThis(this.id)"> Fire <br>
+  <input type="checkbox" id="Check3" name="earthquake" value="Earthquake" onclick="selectOnlyThis(this.id)"> Earthquake <br>
   <div id="map"></div>
   <script>
+    function callback(var data) {
+        
+    }
+    
+    function selectOnlyThis(id) {
+      for (var i = 1; i <= 3; i++) {
+        document.getElementById("Check" + i).checked = false;
+      }
+      document.getElementById(id).checked = true;
+    }
+
+    // Array of markers
+    var markers = [
+      {
+        coords:{lat:30.455513,lng:-97.858647},
+        iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        content:'<h1>Home</h1>'
+      },
+      {
+        coords:{lat:30.2863,lng:-97.7366},
+        content:'<h2>GDC</h2>'
+
+      }
+    ];
+
     function initMap() {
       // Map options
       var options = {
@@ -33,26 +61,13 @@
         }
       );
 
-      // Array of markers
-      var markers = [
-        {
-          coords:{lat:30.455513,lng:-97.858647},
-          iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-          content:'<h1>Home</h1>'
-        },
-        {
-          coords:{lat:30.2863,lng:-97.7366},
-          content:'<h2>GDC</h2>'
-        }
-      ];
-
       // Loop through markers
       for (var i = 0; i < markers.length; i++) {
         addMarker(markers[i]);
       }
 
       // Add marker function
-      function addMarker(props) {
+      function addMarker(props) { 
         var marker = new google.maps.Marker({
           position:props.coords,
           map:map
