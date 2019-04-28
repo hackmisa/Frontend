@@ -15,17 +15,27 @@
 <body>
   <h1>Disaster Detection</h1>
 
-  <input type="checkbox" id="Check1" name="Check" value="Flood" onclick="selectOnlyThis(this.id)"> Flood <br>
-  <input type="checkbox" id="Check2" name="fire" value="Fire" onclick="selectOnlyThis(this.id)"> Fire <br>
-  <input type="checkbox" id="Check3" name="earthquake" value="Earthquake" onclick="selectOnlyThis(this.id)"> Earthquake <br>
-  <input type="checkbox" id="Check4" name="all" value="All" onclick="selectOnlyThis(this.id)"> All <br>
+  <input type="checkbox" id="flood" name="Check" value="Flood" onclick="selectOnlyThis(this.id)"> Flood <br>
+  <input type="checkbox" id="fire" name="fire" value="Fire" onclick="selectOnlyThis(this.id)"> Fire <br>
+  <input type="checkbox" id="earthquake" name="earthquake" value="Earthquake" onclick="selectOnlyThis(this.id)"> Earthquake <br>
+  <input type="checkbox" id="all" name="all" value="All" onclick="selectOnlyThis(this.id)"> All <br>
 
   <div id="map"></div>
 
+  <!-- <script src="/socket.io/socket.io.js"></script> -->
+
   <script>
+    // var socket = io.connect('http://localhost:8080');
+    // socket.on('markers', function (data) {
+    //   console.log(data);
+    // });
+
     function selectOnlyThis(id) {
       for (var i = 1; i <= 4; i++) {
-        document.getElementById("Check" + i).checked = false;
+        document.getElementById("flood").checked = false;
+        document.getElementById("fire").checked = false;
+        document.getElementById("earthquake").checked = false;
+        document.getElementById("all").checked = false;
       }
       document.getElementById(id).checked = true;
       initMap();
@@ -34,20 +44,20 @@
     // Array of markers
     var markers = [
       {
-        coords:{lat:30.455513,lng:-97.858647},
-        iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-        content:'<h1>Home</h1>',
-        tag:'Check1'
+        coordinates :[30.455513,-97.858647],
+        // iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        text: "home",
+        tag:'flood'
       },
       {
-        coords:{lat:30.2863,lng:-97.7366},
-        content:'<h2>GDC</h2>',
-        tag:'Check2'
+        coordinates:[30.2863,-97.7366],
+        text: "fireeeee",
+        tag:'fire'
       },
       {
-        coords:{lat:30.5,lng:-97.5},
-        content:'<h3>Test1</h3>',
-        tag:'Check3'
+        coordinates:[30.5,-97.5],
+        text: "earthquakeeee",
+        tag:'earthquake'
       }
     ];
 
@@ -75,9 +85,32 @@
 
       // Add marker function
       function addMarker(props) {
-        if (props.tag == 'Check1' && document.getElementById("Check1").checked) {
+        console.log(props.tag)
+        console.log(document.getElementById("flood").checked);
+        if (props.tag == 'flood' && document.getElementById("flood").checked) {
           var marker = new google.maps.Marker({
-            position:props.coords,
+            position: {lat:props.coordinates[0],lng:props.coordinates[1]},
+            map:map
+          });
+
+          // Check for custom icon
+          if (props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+
+          // Check content
+          if (props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content:("<h1>" + props.text + "</h1>")
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
+        } else if (props.tag == 'fire' && document.getElementById("fire").checked) {
+          var marker = new google.maps.Marker({
+            position: {lat:props.coordinates[0],lng:props.coordinates[1]},
             map:map
           });
 
@@ -96,9 +129,9 @@
               infoWindow.open(map, marker);
             });
           }
-        } else if (props.tag == 'Check2' && document.getElementById("Check2").checked) {
+        } else if (props.tag == 'earthquake' && document.getElementById("earthquake").checked) {
           var marker = new google.maps.Marker({
-            position:props.coords,
+            position: {lat:props.coordinates[0],lng:props.coordinates[1]},
             map:map
           });
 
@@ -117,30 +150,9 @@
               infoWindow.open(map, marker);
             });
           }
-        } else if (props.tag == 'Check3' && document.getElementById("Check3").checked) {
+        } else if (document.getElementById("all").checked) {
           var marker = new google.maps.Marker({
-            position:props.coords,
-            map:map
-          });
-
-          // Check for custom icon
-          if (props.iconImage) {
-            marker.setIcon(props.iconImage);
-          }
-
-          // Check content
-          if (props.content) {
-            var infoWindow = new google.maps.InfoWindow({
-              content:props.content
-            });
-
-            marker.addListener('click', function(){
-              infoWindow.open(map, marker);
-            });
-          }
-        } else if (document.getElementById("Check4").checked) {
-          var marker = new google.maps.Marker({
-            position:props.coords,
+            position: {lat:props.coordinates[0],lng:props.coordinates[1]},
             map:map
           });
 
@@ -160,8 +172,6 @@
             });
           }
         }
-
-
       }
     }
   </script>
