@@ -14,20 +14,21 @@
 </head>
 <body>
   <h1>Disaster Detection</h1>
+
   <input type="checkbox" id="Check1" name="Check" value="Flood" onclick="selectOnlyThis(this.id)"> Flood <br>
   <input type="checkbox" id="Check2" name="fire" value="Fire" onclick="selectOnlyThis(this.id)"> Fire <br>
   <input type="checkbox" id="Check3" name="earthquake" value="Earthquake" onclick="selectOnlyThis(this.id)"> Earthquake <br>
+  <input type="checkbox" id="Check4" name="all" value="All" onclick="selectOnlyThis(this.id)"> All <br>
+
   <div id="map"></div>
+
   <script>
-    function callback(var data) {
-        
-    }
-    
     function selectOnlyThis(id) {
-      for (var i = 1; i <= 3; i++) {
+      for (var i = 1; i <= 4; i++) {
         document.getElementById("Check" + i).checked = false;
       }
       document.getElementById(id).checked = true;
+      initMap();
     }
 
     // Array of markers
@@ -35,12 +36,18 @@
       {
         coords:{lat:30.455513,lng:-97.858647},
         iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-        content:'<h1>Home</h1>'
+        content:'<h1>Home</h1>',
+        tag:'Check1'
       },
       {
         coords:{lat:30.2863,lng:-97.7366},
-        content:'<h2>GDC</h2>'
-
+        content:'<h2>GDC</h2>',
+        tag:'Check2'
+      },
+      {
+        coords:{lat:30.5,lng:-97.5},
+        content:'<h3>Test1</h3>',
+        tag:'Check3'
       }
     ];
 
@@ -67,27 +74,94 @@
       }
 
       // Add marker function
-      function addMarker(props) { 
-        var marker = new google.maps.Marker({
-          position:props.coords,
-          map:map
-        });
-
-        // Check for custom icon
-        if (props.iconImage) {
-          marker.setIcon(props.iconImage);
-        }
-
-        // Check content
-        if (props.content) {
-          var infoWindow = new google.maps.InfoWindow({
-            content:props.content
+      function addMarker(props) {
+        if (props.tag == 'Check1' && document.getElementById("Check1").checked) {
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map
           });
 
-          marker.addListener('click', function(){
-            infoWindow.open(map, marker);
+          // Check for custom icon
+          if (props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+
+          // Check content
+          if (props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content:props.content
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
+        } else if (props.tag == 'Check2' && document.getElementById("Check2").checked) {
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map
           });
+
+          // Check for custom icon
+          if (props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+
+          // Check content
+          if (props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content:props.content
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
+        } else if (props.tag == 'Check3' && document.getElementById("Check3").checked) {
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map
+          });
+
+          // Check for custom icon
+          if (props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+
+          // Check content
+          if (props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content:props.content
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
+        } else if (document.getElementById("Check4").checked) {
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map
+          });
+
+          // Check for custom icon
+          if (props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+
+          // Check content
+          if (props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content:props.content
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
         }
+
+
       }
     }
   </script>
